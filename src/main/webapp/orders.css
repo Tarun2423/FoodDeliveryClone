@@ -1,0 +1,128 @@
+
+body {
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+}
+body::-webkit-scrollbar {
+    width: 5px;               /* width of the entire scrollbar */
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: rgb(249, 249, 249);        /* color of the tracking area */
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background-color: rgb(247, 218, 56);    /* color of the scroll thumb */
+    border-radius: 20px;      
+    border: 3px solid orange;  
+  }
+  
+.appContainer {
+    padding-top: 15px;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+}
+
+.back {
+    text-align: center;
+    height: 35px;
+    width: 80px;
+    background-color: #64ccb4;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.back:hover {
+    transform: scale(1.1);
+}
+
+
+.material-symbols-outlined {
+    cursor: pointer;
+}
+.orders{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.otitle{
+    font-size: 30px;
+    letter-spacing: 1px;
+}   
+
+.otitle span{
+    color: #4bcfc6;
+}
+
+.dish{
+    padding: 10px;
+    border-radius: 10px;
+  }
+  .dish:hover,.dname:hover{
+    
+    background-color: #f2f1f1;
+  }
+  .dish{
+    display: flex;flex-direction: row;cursor: pointer;width: 70%;text-align: center;justify-content: space-between;align-items:center;
+  }
+
+  
+  .fcontainer{
+    margin-top: 100px;
+    display: flex;
+    align-items: center;
+    background-color: rgb(248, 248, 248);
+    justify-content: center;
+    width: 100%;
+    
+  }
+  .footer{
+   margin-top: 20px;
+    width: 80%;
+    height: 210px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .top img{
+    height: 28px;
+    width: 132px;
+  }
+  .bottom{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .links{
+    display: flex;
+    gap: 20px;
+  }
+  .limg{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .limg img{
+    width: 23px;
+    height: 28px;
+    object-fit: contain;
+    cursor: pointer;
+  }
+  .get{
+    display: flex;
+    gap: 20px;
+  }
+  .get img{
+    width: 120px;
+    height: 40px;
+  }

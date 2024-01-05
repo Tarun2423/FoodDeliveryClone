@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="cart.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;1,400;1,700&family=Noto+Sans:ital,wght@0,400;0,500;0,600;1,700&display=swap" rel="stylesheet" />
+  <title>Cart</title>
+</head>
+
+<body>
+  <div class="appContainer">
+    <div class="nav">
+      <div class="back">
+        <p style="font-size: 20px;" onclick="handleback()">Back</p>
+      </div>
+      <div class="profile">
+        <img style="cursor: pointer;" src="userpic.jpg" alt="User Profile Picture" />
+        <p>TARUN</p>
+        <span class="material-symbols-outlined">keyboard_arrow_down</span>
+      </div>
+    </div>
+    <div class="cart">
+      <div class="title">
+        <p style="font-size: 35px;letter-spacing: 1.2px;">Your <span style="font-size: 35px;color: rgb(102, 216, 216);"> Cart </span></p>
+      </div>
+      <div class="carts" id="CartCon" style="display: flex;flex-direction: column;gap: 30px;align-items: center;justify-content: center;">
+       
+      </div>
+    </div>
+    <div class="carttotal" id="cartTotal">
+      <div class="box">
+        <div class="totaltitle">
+          Cart <span>Total</span>
+        </div>
+        <div class="amount">
+          <div class="delivery">
+            <p style="width: 150px;">Delivery Charges</p>
+            <p style="margin-right: 20px;color: rgb(1, 3, 11);">Rs : 50</p>
+          </div>
+          <div class="delivery">
+            <p style="width: 150px;">Total</p>
+            <p id="totalamount" style="margin-right: 10px;color: rgb(1, 3, 11);">Rs : 250</p>
+          </div>
+        </div>
+      </div>
+      <button style="position: absolute;right: 300px;top: 70px;cursor: pointer;width: 150px;height: 35px;border: none;background-color: rgb(221, 89, 89);color: white;font-size: 18px;border-radius: 10px;" onclick="placeOrder()">Place Order</button>
+    </div>
+  </div>
+  <div class="fcontainer">
+    <div class="footer" style="display: flex;flex-direction: column;">
+      <div class="top" style="display: flex;align-items: center;justify-content: space-between;">
+        <img src="logo.jpg">
+        <div class="lc" style="display: flex;align-items: center;gap: 30px;">
+          <p style="font-size: 16px;">India</p>
+          <div class="language" style="display: flex;align-items: center;justify-content: center;border: 1px solid #dddbdb;gap: 6px;border-radius: 10px;width: 100px;height: 40px;">
+            <span class="material-symbols-outlined">language</span>
+            <p style="font-size: 16px;">English</p>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="links">
+          <p style="font-weight:800;">Social Links</p>
+          <div class="limg">
+            <img src="instagram.png" alt="">
+            <img src="twitter.png" alt="">
+            <img src="youtube.png" alt="">
+          </div>
+        </div>
+        <div class="get">
+          <img src="app.jpg" alt="">
+          <img src="google.jpg" alt="">
+        </div>
+      </div>
+      <div style="border: 1px solid #bab9b9;"></div>
+    </div>
+  </div>
+  <script>
+    function placeOrder(){
+      var cart = JSON.parse(window.localStorage.getItem('cart'));
+      var user = JSON.parse(window.localStorage.getItem('user'));
+      var uname=JSON.parse(user)[0].name;
+      var amount=(document.getElementById('totalamount').textContent)
+      var items=cart
+      var restaurantName=JSON.parse(window.localStorage.getItem('current')).name.trim();
+      console.log(cart)
+      var cartdata="";
+      cart.forEach((item)=>{
+        var res="";
+        res+=item.name+" = "+item.quantity+","
+        cartdata+=res;
+      })
+      console.log(cartdata);
+      var xhttp=new XMLHttpRequest();
+      xhttp.onreadystatechange = function(){
+        if(this.readyState==4 && this.status==200){
+         palert();
+         function palert() {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Order placed successfully",
+          showConfirmButton: false,
+          timer: 1000
+        }).then(()=>{window.localStorage.removeItem("cart");window.location.reload();});
+      }
+        }
+      }
+      xhttp.open('POST', "http://localhost:8080/ZomatoClone/addorder?restaurant="+restaurantName+"&customer="+uname+"&items="+cartdata+"&amount="+amount,true);
+      xhttp.send();
+      
+
+    }
+    window.onload = function () {
+      var cart = JSON.parse(window.localStorage.getItem('cart'));
+
+      if (!cart || cart.length === 0) {
+        console.log("Cart is empty");
+        var cartContainer = document.getElementById('CartCon');
+        cartContainer.innerHTML = "";
+        var ele = document.createElement('div');
+        ele.textContent = "Cart is empty";
+        cartContainer.appendChild(ele);
+        document.getElementById('cartTotal').style.display = "none";
+      } else {
+        document.getElementById('cartTotal').style.display = "flex";
+        updateCart();
+        updateTotal();
+      }
+
+      function updateTotal() {
+        var cart = JSON.parse(window.localStorage.getItem('cart'));
+        var total = 0;
+        cart.forEach((item) => {
+          total += item.price * item.quantity;
+        });
+        total += 50;
+        document.getElementById("totalamount").textContent = total;
+      }
+
+      function updateCart() {
+        var cart = JSON.parse(window.localStorage.getItem('cart'));
+        var cartContainer = document.getElementById('CartCon');
+        cartContainer.innerHTML = "";
+        cart.forEach((item) => {
+          var name = item.name;
+          var price = item.price;
+          var quantity = item.quantity;
+          var itemElem = document.createElement('div');
+          itemElem.className = "item";
+          itemElem.innerHTML = `
+            <p class="dname" style="font-size: 20px;font-weight: 800;cursor: text;width:150px">${name}</p>
+            <div class="info" style="color: #7c7c7c;display: flex;align-items: center;justify-content: space-around;flex-direction: row;gap: 40px;">
+                <p style="font-size: 20px;cursor: text">Rs.${price}</p>
+                <span  style="font-size: 20px;font-weight: 700;margin-left:10px;color: #231f1f;width: 20px;border-radius: 10px;" class="material-symbols-outlined cart-operation add-button">
+                    add
+                </span>
+                <p style="font-size: 20px;color: #1f1919;font-weight: 700;width: 20px;border-radius: 10px;cursor: text;">${quantity}</p>
+                <span  style="font-size: 20px;color: #1e1818;width: 20px;font-weight: 700;border-radius: 10px;" class="material-symbols-outlined cart-operation remove-button">
+                    remove
+                </span>
+            </div>
+            <div class="div">
+                <span style="color: rgb(229, 73, 73);" class="material-symbols-outlined cart-operation delete-button">
+                    delete
+                </span>
+            </div>`;
+          cartContainer.appendChild(itemElem);
+        });
+      }
+
+      window.addEventListener("click", function (event) {
+      var cartOperationElement = event.target.closest(".cart-operation");
+
+      if (cartOperationElement) {
+        if (cartOperationElement.classList.contains("add-button")) {
+          var ename = cartOperationElement.closest(".item").querySelector(".dname").textContent;
+          var cart = JSON.parse(window.localStorage.getItem("cart"));
+          cart.forEach((item) => {
+            if (item.name.trim() == ename.trim()) {
+              item.quantity = item.quantity + 1;
+            }
+          });
+          localStorage.setItem("cart", JSON.stringify(cart));
+          updateCart();
+          updateTotal();
+        } else if (cartOperationElement.classList.contains("remove-button")) {
+          var ename = cartOperationElement.closest(".item").querySelector(".dname").textContent;
+          var cart = JSON.parse(window.localStorage.getItem("cart"));
+          cart.forEach((item) => {
+            if (item.name.trim() == ename.trim()) {
+              if (item.quantity > 0) {
+                item.quantity = item.quantity - 1;
+              }
+            }
+          });
+          localStorage.setItem("cart", JSON.stringify(cart));
+          updateCart();
+          updateTotal();
+        } else if (cartOperationElement.classList.contains("delete-button")) {
+          var ename = cartOperationElement.closest(".item").querySelector(".dname").textContent;
+          var cart = JSON.parse(window.localStorage.getItem("cart"));
+          let filteredCart = cart.filter((item) => {
+            return item.name !== ename;
+          });
+          localStorage.setItem("cart", JSON.stringify(filteredCart));
+          updateCart();
+          if (filteredCart.length == 0) {
+            var cartContainer = document.getElementById('CartCon');
+            cartContainer.innerHTML = "";
+            var ele = document.createElement('div');
+            ele.textContent = "Cart is empty";
+            cartContainer.appendChild(ele);
+            document.getElementById('cartTotal').style.display = "none";
+          }
+          updateTotal();
+          dalert();
+        }
+      } else {
+        console.log("nothing");
+      }
+    });
+
+      function dalert() {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Deleted from cart",
+          showConfirmButton: false,
+          timer: 1000
+        });
+      }
+     
+
+      
+    };
+    function handleback() {
+        window.location.href = "/ZomatoClone/Home.html";
+      }
+  </script>
+</body>
+
+</html>

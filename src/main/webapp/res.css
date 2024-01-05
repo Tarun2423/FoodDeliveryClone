@@ -1,0 +1,153 @@
+body{
+  margin: 0;
+  font-family: 'Lato', sans-serif;
+font-family: 'Noto Sans', sans-serif;
+
+}
+body::-webkit-scrollbar {
+  width: 5px;               /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+  background: rgb(249, 249, 249);        /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: rgb(247, 218, 56);    /* color of the scroll thumb */
+  border-radius: 20px;      
+  border: 3px solid orange;  
+}
+
+.app {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100%; /* Update to 100% */
+}
+
+
+
+.nav{
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+
+}
+.nav img{
+  width: 127px;
+  height: 27px;
+}
+.inp1{
+  width:243px;
+  height: 35.6px;
+  border: none;
+  outline: none;
+  cursor: text;
+}
+.inp{
+  width: 411px;
+  height: 32.4px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  
+  outline: none;
+}
+.inp::placeholder{
+  font-size: 15px;
+  letter-spacing: .3px;
+  padding-left: 16px;
+}
+.imagesSlider{
+  position: relative;
+}
+.wrapper{
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+}
+.imagesSlider button{
+  background-color: #fff;
+  border: none;
+}
+.next-btn{
+  position: absolute;
+  top: 200px;
+  right: 280px;
+cursor: pointer;
+}
+.prev-btn{
+  position: absolute;
+  top: 200px;
+  left: 260px;
+  cursor: pointer;
+
+}
+.wrapper img{
+  width: 600px;
+  height: 400px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+.dish{
+  padding: 10px;
+  border-radius: 10px;
+}
+.dish:hover{
+  
+  background-color: #d8d7d7;
+}
+
+.fcontainer{
+  margin-top: 100px;
+  display: flex;
+  align-items: center;
+  background-color: rgb(248, 248, 248);
+  justify-content: center;
+  width: 100%;
+  
+}
+.footer{
+ margin-top: 20px;
+  width: 80%;
+  height: 210px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.top img{
+  height: 28px;
+  width: 132px;
+}
+.bottom{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.links{
+  display: flex;
+  gap: 20px;
+}
+.limg{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.limg img{
+  width: 23px;
+  height: 28px;
+  object-fit: contain;
+  cursor: pointer;
+}
+.get{
+  display: flex;
+  gap: 20px;
+}
+.get img{
+  width: 120px;
+  height: 40px;
+}

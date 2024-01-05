@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Orders</title>
+    <link rel="stylesheet" href="view.css" >
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;1,400;1,700&family=Noto+Sans:ital,wght@0,400;0,500;0,600;1,700&display=swap" rel="stylesheet" />
+  
+</head>
+<body>
+    <div class="appContainer">
+        <div class="nav">
+          <div class="back">
+            <p style="font-size: 20px;" onclick="handleback()">Back</p>
+          </div>
+        </div>
+        <div class="orders">
+          <div class="otitle">
+            <p>Your <span>Orders</span></p>
+          </div>
+          <div style="border: 1px solid #e6e4e4;margin-bottom: 17px;"></div>
+          <div class="dishes" id="dishesC" style="display: flex;flex-direction: column;gap: 30px;align-items: center;justify-content: center;width: 100%;">
+ 
+    
+          </div>
+        </div>
+        <div class="fcontainer">
+    
+            <div class="footer" style="display: flex;flex-direction: column;">
+              <div class="top" style="display: flex;align-items: center;justify-content: space-between;">
+                <img src="logo.jpg">
+                <div class="lc" style="display: flex;align-items: center;gap: 30px;">
+                  <p style="font-size: 16px;">India</p>
+                  <div class="language" style="display: flex;align-items: center;justify-content: center;border: 1px solid #dddbdb;gap: 6px;border-radius: 10px;width: 100px;height: 40px;">
+                    <span class="material-symbols-outlined">
+                      language
+                    </span>
+                    <p style="font-size: 16px;">English</p>
+                  </div>
+                </div>
+              </div>
+              <div class="bottom">
+                <div class="links">
+                  <p style="font-weight:800;">Social Links</p>
+                  <div class="limg">
+                    <img src="instagram.png" alt="">
+                    <img src="twitter.png" alt="">
+                    <img src="youtube.png" alt="">
+                  </div>
+                </div>
+                <div class="get">
+                  <img src="app.jpg" alt="">
+                  <img src="google.jpg" alt="">
+                </div>
+              </div>
+              <div style="border: 1px solid #bab9b9;"></div>
+            </div>
+          </div>
+          </div>
+     
+      <script>
+        function handleback(){
+            window.location.href = "/ZomatoClone/Home.html";
+        }
+        window.onload = function() {
+          var n = JSON.parse(JSON.parse(window.localStorage.getItem("user")))[0].name;
+          console.log(n);
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              var orderslist = JSON.parse(this.responseText);
+              console.log(orderslist);
+              var dishes = document.getElementById("dishesC");
+              dishes.innerHTML="";
+              orderslist.forEach((order) => {
+                createItem(order)
+              })
+              var dishes = document.getElementById("dishesC");
+              
+    
+              function createItem(order) {
+                var dishelement = document.createElement("div");
+                var dishes = document.getElementById("dishesC");
+                dishelement.className = "dish";
+                dishelement.innerHTML=`
+                <p class="did" style="width:5%">${order.id}</p>
+                <p class="dname" style="border: none;width:25%;font-size:18px;font-weight:800">${order.customer}</p>
+                <div class="info" style="color: #7c7c7c;display: flex;flex-direction: row;gap: 50px;width:70%;">
+                    <div class="in" style="display: flex;flex-direction: column;align-items: center;justify-content: center;width: 60%;padding: 5px;">
+                        <p class="price">Rs.${order.amount}</p>
+                        <p class="desc">${order.items}.</p>
+                    </div>
+    <div class="out"  style="display: flex;flex-direction:row;align-items: center;justify-content: center;gap: 30px;">
+        <p>${order.status}</p>
+    </div>            
+                 
+    
+                </div>
+                `;
+                dishes.appendChild(dishelement);
+              }
+            }
+    
+          }
+    
+          xhttp.open('GET', "http://localhost:8080/ZomatoClone/getuorder?name=" + n, true);
+          xhttp.send()
+        }
+       
+    
+      </script>
+</body>
+</html>

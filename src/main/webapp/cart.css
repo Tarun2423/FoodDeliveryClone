@@ -1,0 +1,198 @@
+
+body {
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+}
+body::-webkit-scrollbar {
+    width: 5px;               /* width of the entire scrollbar */
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: rgb(249, 249, 249);        /* color of the tracking area */
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background-color: rgb(247, 218, 56);    /* color of the scroll thumb */
+    border-radius: 20px;      
+    border: 3px solid orange;  
+  }
+  
+.appContainer {
+    padding-top: 15px;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+}
+
+.back {
+    text-align: center;
+    height: 35px;
+    width: 80px;
+    background-color: #64ccb4;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.back:hover {
+    transform: scale(1.1);
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 80px;
+}
+
+.profile img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: fill;
+}
+
+.profile p {
+    font-size: 16px;
+    font-weight: 400;
+    margin-left: 10px;
+}
+
+.material-symbols-outlined {
+    cursor: pointer;
+}
+.cart{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+}
+.carts{
+    width: 60%;
+}
+.info{
+    text-align: center;
+    gap: 30px;
+}
+.item{
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  .item:hover{
+    
+    background-color: #ebfcfc;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  .footer{
+    margin-top: 20px;
+     width: 80%;
+     height: 210px;
+     display: flex;
+     flex-direction: column;
+     gap: 30px;
+   }
+   .top img{
+     height: 28px;
+     width: 132px;
+   }
+ .bottom{
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+ }
+   .links{
+     display: flex;
+     gap: 20px;
+   }
+ .limg{
+     display: flex;
+     align-items: center;
+     gap: 10px;
+ }
+   .limg img{
+     width: 23px;
+     height: 28px;
+     object-fit: contain;
+     cursor: pointer;
+   }
+   .get{
+     display: flex;
+     gap: 20px;
+   }
+   .get img{
+     width: 120px;
+     height: 40px;
+   }
+   .fcontainer{
+    margin-top: 100px;
+    display: flex;
+    align-items: center;
+    background-color: rgb(248, 248, 248);
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.carttotal{
+    margin-top: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.box{
+    width: 20%;
+    padding: 20px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background-color: rgb(126, 215, 199);
+    border: none;
+    border-radius: 20px;
+    color: #fff;
+}
+.totaltitle{
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+.amount{
+    display: flex;
+    flex-direction: column;
+}
+.delivery{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+.carttotal button:hover{
+transform: scale(1.1);
+}

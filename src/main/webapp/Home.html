@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="home.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <title>Zomatoclone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;1,400;1,700&family=Noto+Sans:ital,wght@0,400;0,500;0,600;1,700&display=swap" rel="stylesheet" />
+
+<script>
+   
+       document.addEventListener("DOMContentLoaded", function() {
+        var username=JSON.parse(window.localStorage.getItem("user"));
+document.getElementById("uname").textContent=(JSON.parse(username)[0].name)
+
+           var name = JSON.parse(username)[0].name;
+           var xhr = new XMLHttpRequest();
+
+           xhr.responseType = 'arraybuffer';
+
+           xhr.onreadystatechange = function() {
+               if (xhr.readyState == 4) {
+                   if (xhr.status == 200) {
+                       var arrayBuffer = xhr.response;
+                       if (arrayBuffer) {
+                           var byteArray = new Uint8Array(arrayBuffer);
+                           var imageUrl = 'data:image/jpeg;base64,' + btoa(String.fromCharCode.apply(null, byteArray));
+                           document.getElementById("displayedImage").src = imageUrl;
+                       } else {
+                           console.error("Failed to retrieve image data");
+                       }
+                   } else {
+                       console.error("Failed to retrieve image. Status: " + xhr.status);
+                   }
+               }
+           };
+
+           xhr.open("GET", "http://localhost:8080/ZomatoClone/getImage?name=" + name, true);
+           xhr.send();
+       });
+   
+window.onload=function(){
+
+var username=JSON.parse(window.localStorage.getItem("user"));
+document.getElementById("uname").textContent=(JSON.parse(username)[0].name)
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+     
+        const restaurants=(JSON.parse(this.responseText));
+        window.localStorage.setItem("restaurants",JSON.stringify( restaurants));
+
+        const gridContainer = document.getElementById('restaurantGrid');
+
+        function createGridItem(restaurant) {
+          const gridItem = document.createElement('div');
+          gridItem.className = 'grid-item';
+          gridItem.style.height='396px';
+          gridItem.style.backgroundColor=' rgba(255, 255, 255, 0.8)';
+          gridItem.style.border= '1px solid #f8f8f8';
+          gridItem.style.width='400px';
+          gridItem.style.fontSize='30px';
+          gridItem.style.padding='6px';
+          gridItem.style.textAlign='center';
+          gridItem.style.borderRadius='10px';
+          gridItem.style.cursor='pointer';
+
+          const imgContainer = document.createElement('div');
+          imgContainer.className = 'img';
+          const img = document.createElement('img');
+          img.src = restaurant.image;
+          img.style.height='248px';
+          img.style.width='400px';
+          img.style.borderRadius='10px';
+      
+          imgContainer.appendChild(img);
+
+          const detailsContainer = document.createElement('div');
+          detailsContainer.className = 'details';
+          detailsContainer.style.display='flex';
+          detailsContainer.style.flexDirection='column';
+          detailsContainer.style.paddingLeft='10px';
+          detailsContainer.style.paddingRight='10px';
+          
+
+
+          detailsContainer.innerHTML = `
+        	  <div class="ftitle" style="display: flex;align-items: center;justify-content: space-between;height: 40px;">
+              <p style="font-size: 19px;color: #1c1c1c;">${restaurant.name}</p>
+              <p style="font-size: 15px;color: #fff;background-color: #24963f;padding: 3px 12px;border-radius: 10px;">${restaurant.rating}*</p>
+            </div>
+            <div class="time" style="display: flex;align-items: center;justify-content: space-between;height: 40px;">
+              <p style="font-size: 16px;color: #696969;">Rs.200 for one</p>
+              <p style="font-size: 16px;color: #696969;">43 mins</p>
+            </div>
+            <div class="line" style="border:1px solid #e8e8e8;margin-top: 5px;"></div>
+            <div class="disclaimer" style="display: flex;align-items: center;justify-content: space-between;">
+              <img src="safety.jpg" style="width: 48px;height: 18px;">
+              <p style="font-size: 14px;color:#828282">Follows all Max safety measures to ensure your food is safe</p>
+            </div>
+
+
+          `;
+
+          gridItem.appendChild(imgContainer);
+          gridItem.appendChild(detailsContainer);
+          gridItem.addEventListener('click', function () {
+            console.log('Clicked on:', restaurant.name);
+            window.localStorage.setItem('current', JSON.stringify(restaurant));
+            window.location.href = 'http://localhost:8080/ZomatoClone/restaurant_order_page.html?restaurant=' + encodeURIComponent(restaurant.name);
+           
+          });
+          gridItem.addEventListener('mouseover', function () {
+        	  gridItem.classList.add("grid-item-hover");
+        	  gridItem.style.border="1px solid #aba9a9";
+             
+            });
+          gridItem.addEventListener('mouseout', function () {
+        	  gridItem.classList.remove("grid-item-hover")
+        	  gridItem.style.border="1px solid white";
+            });
+
+
+          return gridItem;
+        }
+
+        function renderGridItems() {
+          gridContainer.innerHTML = ''; 
+
+          restaurants.forEach((restaurant) => {
+            const gridItem = createGridItem(restaurant);
+            gridContainer.appendChild(gridItem);
+          });
+        }
+
+        renderGridItems();
+
+    }
+    }
+    xhttp.open("GET", "http://localhost:8080/ZomatoClone/getres", true);
+    xhttp.send();
+
+ 
+};
+function handleEvent(event) {
+var restaurantsList=JSON.parse(window.localStorage.getItem("restaurants"))
+const gridContainer = document.getElementById('restaurantGrid');
+var value=(event.target.value).toLowerCase();
+var filteredRestaurants=restaurantsList.filter((restaurant)=> (restaurant.name).toLowerCase().includes(event.target.value))
+renderGridItems(filteredRestaurants)
+function renderGridItems(restaurants) {
+          gridContainer.innerHTML = ''; 
+
+          restaurants.forEach((restaurant) => {
+            const gridItem = createGridItem(restaurant);
+            gridContainer.appendChild(gridItem);
+          });
+        }
+        function createGridItem(restaurant) {
+          const gridItem = document.createElement('div');
+          gridItem.className = 'grid-item';
+          gridItem.style.height='396px';
+          gridItem.style.backgroundColor=' rgba(255, 255, 255, 0.8)';
+          gridItem.style.border= '1px solid #f8f8f8';
+          gridItem.style.width='400px';
+          gridItem.style.fontSize='30px';
+          gridItem.style.padding='6px';
+          gridItem.style.textAlign='center';
+          gridItem.style.borderRadius='10px';
+          gridItem.style.cursor='pointer';
+
+          const imgContainer = document.createElement('div');
+          imgContainer.className = 'img';
+          const img = document.createElement('img');
+          img.src = restaurant.image;
+          img.style.height='248px';
+          img.style.width='400px';
+          img.style.borderRadius='10px';
+      
+          imgContainer.appendChild(img);
+
+          const detailsContainer = document.createElement('div');
+          detailsContainer.className = 'details';
+          detailsContainer.style.display='flex';
+          detailsContainer.style.flexDirection='column';
+          detailsContainer.style.paddingLeft='10px';
+          detailsContainer.style.paddingRight='10px';
+          
+
+
+          detailsContainer.innerHTML = `
+        	  <div class="ftitle" style="display: flex;align-items: center;justify-content: space-between;height: 40px;">
+              <p style="font-size: 19px;color: #1c1c1c;">${restaurant.name}</p>
+              <p style="font-size: 15px;color: #fff;background-color: #24963f;padding: 3px 12px;border-radius: 10px;">${restaurant.rating}*</p>
+            </div>
+            <div class="time" style="display: flex;align-items: center;justify-content: space-between;height: 40px;">
+              <p style="font-size: 16px;color: #696969;">Rs.200 for one</p>
+              <p style="font-size: 16px;color: #696969;">43 mins</p>
+            </div>
+            <div class="line" style="border:1px solid #e8e8e8;margin-top: 5px;"></div>
+            <div class="disclaimer" style="display: flex;align-items: center;justify-content: space-between;">
+              <img src="safety.jpg" style="width: 48px;height: 18px;">
+              <p style="font-size: 14px;color:#828282">Follows all Max safety measures to ensure your food is safe</p>
+            </div>
+
+
+          `;
+
+          gridItem.appendChild(imgContainer);
+          gridItem.appendChild(detailsContainer);
+          gridItem.addEventListener('click', function () {
+            console.log('Clicked on:', restaurant.name);
+            window.localStorage.setItem('current', JSON.stringify(restaurant));
+            window.location.href = 'http://localhost:8080/ZomatoClone/restaurant_order_page.html?restaurant=' + encodeURIComponent(restaurant.name);
+           
+          });
+          gridItem.addEventListener('mouseover', function () {
+        	  gridItem.classList.add("grid-item-hover");
+        	  gridItem.style.border="1px solid #aba9a9";
+             
+            });
+          gridItem.addEventListener('mouseout', function () {
+        	  gridItem.classList.remove("grid-item-hover")
+        	  gridItem.style.border="1px solid white";
+            });
+
+
+          return gridItem;
+        }
+
+}
+
+</script>
+
+</head>
+
+<body>
+  <div class="app">
+    <div class="navContainer">
+      <div class="nav">
+        <img src="logo.jpg" alt="" />
+        <div class="inputs" style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border: 1px solid gray;
+              padding: 10px;
+              border-radius: 10px;
+            ">
+          <input class="inp1" type="text" placeholder="" />
+          <span style="
+                color: rgb(98, 97, 97);
+                border-right: 1px solid rgb(175, 173, 173);
+                padding: 4px;
+              " class="material-symbols-outlined">
+            arrow_drop_down
+          </span>
+          <span style="
+                color: rgb(175, 173, 173);
+                font-weight: 500;
+                padding-left: 10px;
+              " class="material-symbols-outlined">
+            search
+          </span>
+          <input id="Sinp" class="inp" type="text" placeholder="Search for restaurant, cuisine or a dish" oninput="handleEvent(event)" />
+        </div>
+        <div class="profile" style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin-left: 80px;
+            ">
+          <img id="displayedImage" style="
+                height: 50px;
+                width: 50px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-right: 20px;
+              " src="userpic.jpg" />
+          <p id="uname" style="font-size: 16px; font-weight: 400">TARUN</p>
+          <span style="cursor: pointer" class="material-symbols-outlined">
+            keyboard_arrow_down
+          </span>
+        </div>
+        <button style="color: white;background-color: #e1e143;border: none;height: 35px;width: 120px;font-size: 16px;border-radius: 20px;cursor: pointer;" onclick="orderPage()">View Orders</button>
+        <button style="color: white;background-color: #ed4f36;border: none;height: 35px;width: 100px;font-size: 16px;border-radius: 20px;cursor: pointer;" onclick="logout()">Logout</button>
+      </div>
+      <div class="tabs">
+        <div class="delivery">
+          <div class="deldiv">
+            <img src="veh.jpg">
+          </div>
+          <p>Delivery</p>
+        </div>
+        <div class="dining">
+          <div class="dindiv">
+
+            <img src="dining.jpg">
+          </div>
+          <p>Dining Out</p>
+        </div>
+        <div class="night">
+          <div class="nigdiv">
+
+            <img src="night.jpg">
+          </div>
+          <p>Nightlife</p>
+        </div>
+      </div>
+    </div>
+    <div class="Eat">
+      <div class="heading">
+        <span style="font-size: 30px;color:#1c1c1c;margin-top: 30px;">Eat What makes you happy</span>
+      </div>
+      <div class="foods">
+        <div class="wrapper">
+          <div class="idly">
+            <img src="idly.jpg">
+            <p>Idly</p>
+          </div>
+          <div class="idly">
+            <img src="dosa.jpg">
+            <p>Dosa</p>
+          </div>
+          <div class="idly">
+            <img src="Tiffin.jpg">
+            <p>Tiffin</p>
+          </div>
+          <div class="idly"><img src="Pongal.jpg">
+            <p>Pongal</p>
+          </div>
+          <div class="idly"><img src="Poori.jpg">
+            <p>Poori</p>
+          </div>
+          <div class="idly"><img src="Thali.jpg">
+            <p>Thali</p>
+          </div>
+          <div class="idly">
+            <img src="vada.jpg">
+            <p>Vada</p>
+          </div>
+          <div class="idly">
+            <img src="biryani.jpg">
+            <p>Biryani</p>
+          </div>
+          <div class="idly">
+            <img src="cake.jpg">
+            <p>Cakes</p>
+          </div>
+          <div class="idly">
+            <img src="Tea.jpg">
+            <p>Tea</p>
+          </div>
+          <div class="idly">
+            <img src="chicken.jpg">
+            <p>Chicken</p>
+          </div>
+          <div class="idly">
+            <img src="burger.jpg">
+            <p>Burgers</p>
+          </div>
+        </div>
+        <button class="next-btn"><span class="material-symbols-outlined">
+            arrow_forward_ios
+          </span></button>
+        <button class="prev-btn"><span class="material-symbols-outlined">
+            arrow_back_ios
+          </span></button>
+      </div>
+
+    </div>
+    <div class="Brands">
+      <div class="heading">
+        <span style="font-size: 30px;color:#1c1c1c;margin-top: 30px;">Top brands for you</span>
+      </div>
+      <div class="Res">
+        <div class="wrapper">
+          <div class="popular">
+            <img src="mc.jpg">
+            <p>MC-Donalds</p>
+          </div>
+          <div class="popular">
+            <img src="dom.jpg">
+            <p>Dominos</p>
+          </div>
+          <div class="popular">
+            <img src="a2b.jpg">
+            <p>A2B</p>
+          </div>
+          <div class="popular"><img src="ss.jpg">
+            <p>SS Hyderabad Biryani</p>
+          </div>
+          <div class="popular"><img src="anj.jpg">
+            <p>Anjappar</p>
+          </div>
+          <div class="popular"><img src="san.jpg">
+            <p>Sangeetha</p>
+          </div>
+          <div class="popular">
+            <img src="bur.jpg">
+            <p>Burger Kings</p>
+          </div>
+          <div class="popular">
+            <img src="kfc.jpg">
+            <p>KFC</p>
+          </div>
+        </div>
+        <button class="next-btn1"><span class="material-symbols-outlined">
+            arrow_forward_ios
+          </span></button>
+        <button class="prev-btn1"><span class="material-symbols-outlined">
+            arrow_back_ios
+          </span></button>
+      </div>
+     
+    </div>
+    <div class="restaurants" style="margin-top: 20px;margin-bottom: 20px;display: flex;align-items: center;flex-direction: column;justify-content: flex-start;">
+      <span style="font-size: 30px;color: #1c1c1c;margin-top: 20px;margin-bottom: 20px;">Delivery Restaurants in Chennai</span>
+      <div class="grid-container" id="restaurantGrid">
+        
+      </div>
+    </div>
+    <div class="fcontainer">
+
+      <div class="footer" style="display: flex;flex-direction: column;">
+        <div class="top" style="display: flex;align-items: center;justify-content: space-between;">
+          <img src="logo.jpg">
+          <div class="lc" style="display: flex;align-items: center;gap: 30px;">
+            <p style="font-size: 16px;">India</p>
+            <div class="language" style="display: flex;align-items: center;justify-content: center;border: 1px solid #dddbdb;gap: 6px;border-radius: 10px;width: 100px;height: 40px;">
+              <span class="material-symbols-outlined">
+                language
+              </span>
+              <p style="font-size: 16px;">English</p>
+            </div>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="links">
+            <p style="font-weight:800;">Social Links</p>
+            <div class="limg"> 
+              <img src="instagram.png" alt="">
+              <img src="twitter.png" alt="">
+              <img src="youtube.png" alt="">
+            </div>
+          </div>
+          <div class="get">
+            <img src="app.jpg" alt="">
+            <img src="google.jpg" alt="">
+          </div>
+        </div>
+        <div style="border: 1px solid #bab9b9;"></div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    function orderPage(){
+      window.location.href="/ZomatoClone/view.html";
+    }
+    function logout(){
+      localStorage.clear();
+      window.location.href="/ZomatoClone/login.html";
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const wrapper = document.querySelector('.foods .wrapper');
+      const items = document.querySelectorAll('.idly');
+      const wrapper1 = document.querySelector('.Res .wrapper');
+      const items1 = document.querySelectorAll('.popular');
+      const itemCount = items.length;
+      const itemCount1 = items1.length;
+      const itemsPerSlide = 4;
+      const itemsPerSlide1 = 4;
+      let currentSlide = 0;
+      let currentSlide1 = 0;
+
+      function showSlide() {
+        const startIndex = currentSlide * itemsPerSlide;
+        const endIndex = startIndex + itemsPerSlide;
+
+        items.forEach((item, index) => {
+          if (index >= startIndex && index < endIndex) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      }
+
+      function showSlide1() {
+        const startIndex = currentSlide1 * itemsPerSlide1;
+        const endIndex = startIndex + itemsPerSlide1;
+
+        items1.forEach((item, index) => {
+          if (index >= startIndex && index < endIndex) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      }
+
+      function nextSlide() {
+        currentSlide = (currentSlide + 1) % Math.ceil(itemCount / itemsPerSlide);
+        showSlide();
+      }
+
+      function nextSlide1() {
+        currentSlide1 = (currentSlide1 + 1) % Math.ceil(itemCount1 / itemsPerSlide1);
+        showSlide1();
+      }
+
+
+      function prevSlide() {
+        currentSlide = (currentSlide - 1 + Math.ceil(itemCount / itemsPerSlide)) % Math.ceil(itemCount / itemsPerSlide);
+        showSlide();
+      }
+
+      function prevSlide1() {
+        currentSlide1 = (currentSlide1 - 1 + Math.ceil(itemCount1 / itemsPerSlide1)) % Math.ceil(itemCount1 / itemsPerSlide1);
+        showSlide1();
+      }
+      showSlide();
+      showSlide1();
+      // setInterval(nextSlide, 3000);
+      document.querySelector('.next-btn').addEventListener('click', nextSlide);
+      document.querySelector('.prev-btn').addEventListener('click', prevSlide);
+      document.querySelector('.next-btn1').addEventListener('click', nextSlide1);
+      document.querySelector('.prev-btn1').addEventListener('click', prevSlide1);
+      const filterWrapper = document.querySelector('.filterWrapper');
+      const filters = document.querySelector('.filters');
+      
+      function handleGridItemClick(event) {
+    const restaurantName = event.currentTarget.querySelector('.ftitle p').textContent; 
+    window.location.href = 'restaurant_order_page.html?restaurant=' + encodeURIComponent(restaurantName);
+  }
+  const gridItems = document.querySelectorAll('.grid-item');
+  gridItems.forEach((item) => {
+    item.addEventListener('click', handleGridItemClick);
+  });
+  
+    });
+  </script>
+
+
+</body>
+
+</html>
