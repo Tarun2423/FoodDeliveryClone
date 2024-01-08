@@ -92,7 +92,7 @@ document.getElementById("uname").textContent=(JSON.parse(username)[0].name)
           detailsContainer.innerHTML = `
         	  <div class="ftitle" style="display: flex;align-items: center;justify-content: space-between;height: 40px;">
               <p style="font-size: 19px;color: #1c1c1c;">${restaurant.name}</p>
-              <p style="font-size: 15px;color: #fff;background-color: #24963f;padding: 3px 12px;border-radius: 10px;">${restaurant.rating}*</p>
+              <p style="font-size: 15px;color: #fff;background-color: #24963f;padding: 3px 12px;border-radius: 10px;">${restaurant.rating!=undefined?restaurant.rating:"2.0"}*</p>
             </div>
             <div class="time" style="display: flex;align-items: center;justify-content: space-between;height: 40px;">
               <p style="font-size: 16px;color: #696969;">Rs.200 for one</p>
@@ -191,16 +191,17 @@ function renderGridItems(restaurants) {
           detailsContainer.style.paddingLeft='10px';
           detailsContainer.style.paddingRight='10px';
           
-
+          
+          
 
           detailsContainer.innerHTML = `
         	  <div class="ftitle" style="display: flex;align-items: center;justify-content: space-between;height: 40px;">
               <p style="font-size: 19px;color: #1c1c1c;">${restaurant.name}</p>
-              <p style="font-size: 15px;color: #fff;background-color: #24963f;padding: 3px 12px;border-radius: 10px;">${restaurant.rating}*</p>
+              <p style="font-size: 15px;color: #fff;background-color: #24963f;padding: 3px 12px;border-radius: 10px;">${restaurant.rating!=undefined?restaurant.rating:"2.0"}</p>
             </div>
             <div class="time" style="display: flex;align-items: center;justify-content: space-between;height: 40px;">
-              <p style="font-size: 16px;color: #696969;">Rs.200 for one</p>
-              <p style="font-size: 16px;color: #696969;">43 mins</p>
+              <p style="font-size: 16px;color: #696969;">Rs.300 for one</p>
+              <p style="font-size: 16px;color: #696969;">23 mins</p>
             </div>
             <div class="line" style="border:1px solid #e8e8e8;margin-top: 5px;"></div>
             <div class="disclaimer" style="display: flex;align-items: center;justify-content: space-between;">
@@ -234,6 +235,18 @@ function renderGridItems(restaurants) {
         }
 
 }
+document.addEventListener('click', function (event) {
+  const clickedElement = event.target;
+  if (clickedElement.classList.contains('popular') || clickedElement.parentElement.classList.contains('popular')) {
+    const dishContainer = clickedElement.closest('.popular').querySelector('p');
+    if (dishContainer) {
+      const itemName = dishContainer.textContent;
+      window.localStorage.setItem("current",JSON.stringify(JSON.parse(window.localStorage.getItem("restaurants")).filter((r)=>r.name==itemName)[0]))
+      window.location.href = 'http://localhost:8080/ZomatoClone/restaurant_order_page.html?restaurant=' + encodeURIComponent(itemName);
+    } 
+  }
+});
+
 
 </script>
 

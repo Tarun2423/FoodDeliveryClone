@@ -71,7 +71,7 @@
         </div>
         <div style="border: 1px solid #e6e4e4;margin-bottom: 17px;"></div>
         <div class="dishes" id="dishesC" style="display: flex;flex-direction: column;gap: 30px;align-items: center;justify-content: center;">
-          <div class="dish" style="display: flex;flex-direction: row;gap: 10px;cursor: pointer;">
+          <!-- <div class="dish" style="display: flex;flex-direction: row;gap: 10px;cursor: pointer;">
             <p class="dname" style="font-size: 20px;font-weight: 800;">New year special coookie cake</p>
             <div class="info" style="color: #7c7c7c;">
               <p class="price">Rs.550</p>
@@ -80,7 +80,7 @@
 
             </div>
 
-          </div>
+          </div> -->
 
         </div>
       </div>
@@ -197,27 +197,28 @@ document.getElementById("addItem").classList.remove("dnone");
       var resdetails = (JSON.parse(restaurant));
       document.getElementById("rhigh").textContent = resdetails[0].highlight;
       document.getElementById("rloc").textContent = resdetails[0].location;
-      document.getElementById("rrating").textContent = resdetails[0].rating;
+      if(resdetails[0].rating!=undefined){document.getElementById("rrating").textContent = resdetails[0].rating;}
+      document.getElementById("rname").textContent =n;
 
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           console.log(JSON.parse(this.responseText));
           var h = JSON.parse(this.responseText);
-          console.log(h);
-          var it=(h[0].items)
-          window.localStorage.setItem("fooditems",it);
-          var items = (h[0].items).split("//");
-          console.log(items);
-          var dishesContainer = document.getElementById("dishesC");
-          dishesContainer.innerHTML = "";
-          document.getElementById("rname").textContent = h[0].name;
-          items.forEach((item) => {
+          if(h.length>0){
+            var it=(h[0].items)
+            window.localStorage.setItem("fooditems",it);
+            var items = (h[0].items).split("//");
+            console.log(items);
+            var dishesContainer = document.getElementById("dishesC");
+            dishesContainer.innerHTML = "";
+            document.getElementById("rname").textContent = h[0].name;
+            items.forEach((item) => {
             var fooditem = (item.split("/"));
             var fname = fooditem[0]
             var fprice = fooditem[1]
             var fdesc = fooditem[2]
-
+            
             var dish = document.createElement('div');
             dish.className = "dish";
             dish.style.display = "flex";
@@ -227,8 +228,8 @@ document.getElementById("addItem").classList.remove("dnone");
             dish.style.alignItems = "center";
             dish.style.width = "100%";
             dish.style.justifyContent = "flex-start";
-
-
+            
+            
             dish.innerHTML = `
       <p class="dname" style="font-size: 20px;font-weight: 800;width:150px">${fname}</p>
       <div style="display:flex;align-items:center;justify-content:center;float:left;margin-left:100px;">
@@ -236,12 +237,16 @@ document.getElementById("addItem").classList.remove("dnone");
                         <p class="price">Rs.${fprice}</p>
                         <p class="desc">${fdesc}.</p>
                     </div>
-      </div>
+                    </div>
                     `;
-            dishesContainer.appendChild(dish);
-
-          })
-        }
+                    dishesContainer.appendChild(dish);
+                    
+                  })
+                }
+                else{
+                  document.getElementById("dishesC").innerHTML=`<p style="color:red;font-size:17px;font-style:italic;margin-top:50px;margin-bottom:50px;">No items to display</p>`;
+                }
+              }
       }
       xhttp.open("GET", "http://localhost:8080/ZomatoClone/getfood?resname="+n, true);
       xhttp.send();

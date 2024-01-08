@@ -53,6 +53,7 @@ body::-webkit-scrollbar {
     outline: none;
     cursor: text;
 }
+
 .inp{
     width: 411px;
     height: 32.4px;

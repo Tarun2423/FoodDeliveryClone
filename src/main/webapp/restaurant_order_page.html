@@ -8,7 +8,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="res.css" />
-  <script src="sweetalert2.all.min.js"></script>
+ 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <title>Zomatoclone</title>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -32,19 +32,20 @@
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          console.log(JSON.parse(this.responseText));
+          console.log("response",JSON.parse(this.responseText));
           var h = JSON.parse(this.responseText);
-          var items = (h[0].items).split("//");
-          console.log(items);
-          var dishesContainer = document.getElementById("dishesC");
-          dishesContainer.innerHTML = "";
-          document.getElementById("rname").textContent = h[0].name;
-          items.forEach((item) => {
+          if(h.length>0){
+
+            var items = (h[0].items).split("//");
+            var dishesContainer = document.getElementById("dishesC");
+            dishesContainer.innerHTML = "";
+            document.getElementById("rname").textContent = h[0].name;
+            items.forEach((item) => {
             var fooditem = (item.split("/"));
             var fname = fooditem[0]
             var fprice = fooditem[1]
             var fdesc = fooditem[2]
-
+            
             var dish = document.createElement('div');
             dish.className = "dish";
             dish.style.display = "flex";
@@ -54,25 +55,31 @@
             dish.style.alignItems = "center";
             dish.style.width = "100%";
             dish.style.justifyContent = "flex-start";
-
-
+            
+            
             dish.innerHTML = `
-      <p class="dname" style="font-size: 20px;font-weight: 800;width:150px">${fname}</p>
-      <div style="display:flex;align-items:center;justify-content:center;float:left">
-                    <div class="info" style="color: #7c7c7c;width:500px" >
-                        <p class="price">Rs.${fprice}</p>
-                        <p class="desc">${fdesc}.</p>
-                    </div>
-                    <p class="add-to-cart-btn" style="font-size: 15px;color: #fff;background-color: #24963f;width: 80px;padding: 3px 12px;border-radius: 10px;height: 25px;">Add to cart</p>
-      </div>
-                    `;
-            dishesContainer.appendChild(dish);
-
-          })
+            <p class="dname" style="font-size: 20px;font-weight: 800;width:150px">${fname}</p>
+            <div style="display:flex;align-items:center;justify-content:center;float:left">
+              <div class="info" style="color: #7c7c7c;width:500px" >
+                <p class="price">Rs.${fprice}</p>
+                <p class="desc">${fdesc}.</p>
+                </div>
+                <p class="add-to-cart-btn" style="font-size: 15px;color: #fff;background-color: #24963f;width: 80px;padding: 3px 12px;border-radius: 10px;height: 25px;">Add to cart</p>
+                </div>
+                `;
+                dishesContainer.appendChild(dish);
+                
+              })
+            }
+          }
+        else{
+ 
+          document.getElementById("dishesC").innerHTML = `<p style="color:red;font-size:17px;font-style:italic;margin-top:50px;margin-bottom:50px;">No items to display</p>`;
         }
       }
       xhttp.open("GET", "http://localhost:8080/ZomatoClone/getfood?resname=" + n, true);
       xhttp.send();
+ 
     }
     document.addEventListener('click', function (event) {
     if (event.target.classList.contains('add-to-cart-btn')) {
@@ -197,16 +204,7 @@
         </div>
         <div style="border: 1px solid #e6e4e4;margin-bottom: 17px;"></div>
         <div class="dishes" id="dishesC" style="display: flex;flex-direction: column;gap: 30px;align-items: center;justify-content: center;">
-          <div class="dish" style="display: flex;flex-direction: row;gap: 10px;cursor: pointer;">
-            <p class="dname" style="font-size: 20px;font-weight: 800;">New year special coookie cake</p>
-            <div class="info" style="color: #7c7c7c;">
-              <p class="price">Rs.550</p>
-              <p class="desc">Indulge in the sweetness of the New Year with the richness of our chocolate truffle cake, each bite is a journey into the rich chocolate goodness.</p>
-              <p style="font-size: 15px;color: #fff;background-color: #24963f;width: 80px;;padding: 3px 12px;border-radius: 10px;height: 25px;">Add to cart</p>
-
-            </div>
-
-          </div>
+          <!-- s -->
 
         </div>
       </div>
@@ -262,6 +260,10 @@
     document.addEventListener("DOMContentLoaded", function() {
       var restaurant = window.localStorage.getItem("current")
       var resdetails = (JSON.parse(restaurant));
+      console.log(resdetails)
+      console.log("checkk",resdetails.displayimages)
+      var resname=resdetails.name;
+      document.getElementById("rname").textContent = resname;
       var disimages = resdetails.displayimages
       var images = disimages.split("/");
       var wrapperContainer = document.getElementById("dwrapper");

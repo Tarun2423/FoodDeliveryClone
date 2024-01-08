@@ -23,6 +23,12 @@ body{
 }
 .imgContainer{
     position: relative;   
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 50px;
+    justify-content: center;
 }
 .reginText{
     position: absolute;
@@ -33,9 +39,9 @@ body{
 }
 .logimg{
    
-    width: 500px;
+    width: 550px;
     height: 500px;
-    margin-left: 50px;
+    /*  */
     object-fit: contain;
 }
 
@@ -98,7 +104,7 @@ input::placeholder{
 }
 .in{
     border-radius: 5%;
-    cursor: pointer;
+    /* cursor: pointer; */
     padding: 0;
     border: none;
     font-size: 16px;
@@ -151,4 +157,51 @@ input::placeholder{
   
   #imageName{
     color:green;
+  }
+
+  .addRestaurant{
+    width: 100vi;
+    height: 100vh;
+  }
+  body{
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+font-family: 'Noto Sans', sans-serif;
+overflow-x: hidden;
+
+}
+body::-webkit-scrollbar {
+    width: 5px;               /* width of the entire scrollbar */
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: rgb(249, 249, 249);        /* color of the tracking area */
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background-color: rgb(247, 218, 56);    /* color of the scroll thumb */
+    border-radius: 20px;      
+    border: 3px solid orange;  
+  }
+
+  .addRestaurant{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .restaurant{
+    background:linear-gradient(rgb(52, 237, 243),rgb(52, 104, 172));
+    border-radius: 20px;
+    width: 600px;
+    height: 450px;
+    padding: 20px;
+    display: flex;align-items: center;justify-content: center;
+  }
+  .ab:hover{
+    transform:scale(1.1);
+  }
+  .ab{
+    box-shadow: 1px 1px 2px rgb(35, 136, 12);
   }

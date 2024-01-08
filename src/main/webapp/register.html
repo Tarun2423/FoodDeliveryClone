@@ -13,11 +13,14 @@
     <title>Add User</title>
   </head>
   <body>
-   
       <div id="con" class="container">
           <div class="ad">
               <div class="imgContainer">
-                  <img src="reg1.jpg" alt="" class="logimg">
+                <div class="text" style="padding: 5px;">
+                  <p style="color: rgb(71, 183, 186);font-size: 35px;font-style: italic;font-weight: 600;">Want to List your restaurant!?</p>
+                  <button class="ab" onclick="handleres()" style="margin-left: 140px;cursor:pointer;font-size: 16px;border: none;background-color: rgb(124, 213, 79);color: white;height: 40px;width: 120px;border-radius: 20px;letter-spacing: 1px;">Click here !</button>
+                </div>
+                <img src="reg1.jpg" alt="" class="logimg">                
               </div>
           </div>
           <div class="loginContainer">
@@ -31,7 +34,7 @@
                       <input class="in" style="color: white;cursor: pointer;" type="date" name="dob" id="dob" placeholder="Date Of Birth" />
                       <input class="in" style="margin-bottom: 10px;" type="text" name="password" id="password" placeholder="Password" />
                       <input class="in" type="text" name="address" id="address" placeholder="Address" />
-                    <form id="avatarForm" onsubmit="event.preventDefault(); register();" action="UpdateAvatar" method="post" enctype="multipart/form-data">
+                    <form id="avatarForm" onsubmit="event.preventDefault(); register();"  method="post" enctype="multipart/form-data">
 
         <input type="file" name="avatar" id="fileInput" >
     </form>
@@ -42,7 +45,39 @@
               </div>
           </div>
       </div>
+<div class="addRestaurant" id="addR">
+  <p style="color: rgb(52, 104, 172);font-size: 30px;letter-spacing: 1px;"><span style="color: rgb(52, 237, 243);">Add </span>Restaurant</p>
 
+  <div class="restaurant">
+  <div class="inp">
+    <div class="a1" style="display: flex;align-items: center;gap: 30px;">
+      <input class="in" type="text" name="rname" id="rname" placeholder="Restaurant Name" />
+      <input class="in" type="remail" name="remail" id="remail" placeholder="Email" />
+    </div>
+    <div class="a2"  style="display: flex;align-items: center;gap: 30px;">
+      <input class="in" style="margin-bottom: 10px;" type="text" name="rpassword" id="rpassword" placeholder="Password" />
+      <input class="in" type="text" name="raddress" id="raddress" placeholder="Address" />
+    </div>
+    <div class="a3" style="display: flex;align-items: center;gap: 30px;">
+      <input class="in" type="text" name="contact" id="contact" placeholder="Contact" style="display: flex;align-items: center;justify-content: center;" />
+      <input class="in" type="text" name="Highlight" id="Highlight" placeholder="Highlights" />
+    </div>
+    <form style="display: flex;flex-direction: column;align-items: center;justify-content: center;gap: 30px;margin-top: 20px;" id="avatarForm1" onsubmit="event.preventDefault(); addrestaurant();"  method="post" enctype="multipart/form-data">
+      <div class="thumb"style="display: flex;align-items: center;justify-content: center;gap: 20px;">
+        <label for="TfileInput">Thumbnail Image</label>
+        <input style="cursor: pointer;color: white;font-size: 12px;letter-spacing: 1.1px;font-style: italic;" type="file" name="avatar1" id="TfileInput" >
+      </div>
+      <div class="ai" style="display: flex;align-items: center;justify-content: center;gap: 60px;">
+        <label for="imageInput">Add Images</label>
+        <input style="cursor: pointer;color: white;font-size: 12px;letter-spacing: 1.1px;font-style: italic;" type="file" id="imageInput" multiple>
+      </div>
+  </form>
+  <div class="links">
+    <button class="btn" type="button" onclick="addrestaurant()" style="width: 100px;font-size: 18px;">Create</button>
+</div>
+</div>
+</div>
+</div>
 
     <script>
    
@@ -69,6 +104,10 @@ function showApiResultModal(message, isSuccess) {
 }
       function redirectToHome(){
         window.location="/hr/Home.html";
+      }
+      function handleres(){
+        var e=document.getElementById("addR");
+        e.scrollIntoView({behavior:"smooth"});
       }
      
       function register() {
@@ -101,6 +140,48 @@ function showApiResultModal(message, isSuccess) {
     	    };
 
     	    xhttp.open("POST", "http://localhost:8080/ZomatoClone/register", true);
+    	    xhttp.send(formData);
+    	}
+      function addrestaurant() {
+    	    var name = document.getElementById("rname").value;
+    	    var password = document.getElementById("rpassword").value;
+    	    var email = document.getElementById("remail").value;
+    	    var address = document.getElementById("raddress").value;
+    	    var contact = document.getElementById("contact").value;
+    	    var highlight = document.getElementById("Highlight").value;
+          var Thumbnail = document.getElementById("TfileInput");
+    	    var file = Thumbnail.files[0];
+          console.log(file)
+          var Images = document.getElementById("imageInput");
+    	    var images = Images.files;
+          console.log(images)
+    	    var formData = new FormData();
+    	    formData.append('name', name);
+    	    formData.append('email', email);
+    	    formData.append('password', password);
+    	    formData.append('address', address);
+    	    formData.append('contact', contact);
+    	    formData.append('highlight', highlight);
+    	    formData.append('file', file);
+          for (var i = 0; i < images.length; i++) {
+        formData.append('images', images[i]);
+    }
+
+    	    var xhttp = new XMLHttpRequest();
+
+    	    xhttp.onreadystatechange = function () {
+           alert(xhttp.responseText);
+    	        if (this.readyState == 4) {
+                alert(xhttp.responseText);
+    	            if (this.status == 200 && this.responseText.trim() == "success") {
+    	                showApiResultModal("Registered Successfully", true);
+    	            } else if (this.status == 200 && this.responseText.trim() == "some error") {
+    	                showApiResultModal("Something went wrong..", false);
+    	            }
+    	        }
+    	    };
+
+    	    xhttp.open("POST", "http://localhost:8080/ZomatoClone/AddRestaurant", true);
     	    xhttp.send(formData);
     	}
 

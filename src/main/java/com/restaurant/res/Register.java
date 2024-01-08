@@ -51,7 +51,7 @@ public class Register extends HttpServlet {
 			pst.setString(5, dob);
 			pst.setBytes(6, imageData);
 			
-			pst.executeUpdate();
+			pst.executeUpdate();	
 			System.out.println("Successfully added");
 			res.getWriter().println("success");
 			con.close();
